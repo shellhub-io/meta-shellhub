@@ -1,0 +1,3 @@
+#!/bin/sh
+
+exec shellhub-agent "$DAEMON_ARGS" >> "$LOGFILE" 2>&1
