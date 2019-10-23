@@ -37,6 +37,7 @@ export LOGFILE
 # shellhub-agent.start
 export SERVER_ADDRESS
 export PRIVATE_KEY
+export TENANT_ID
 
 do_start()
 {
