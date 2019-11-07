@@ -4,7 +4,7 @@ LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://${S}/src/${GO_IMPORT}/LICENSE;md5=fa818a259cbed7ce8bc2a22d35a464fc"
 DEPENDS = "glide-native libxcrypt"
 
-SRCREV = "5c2567d0ddfd6f7b38ce3f1bed71d10e2564610b"
+SRCREV = "f5da8b035ba5a44f1345ecd04380c43ea591d2ac"
 SRC_URI = " \
     git://github.com/shellhub-io/shellhub;branch=master \
     file://shellhub-agent.initd \
