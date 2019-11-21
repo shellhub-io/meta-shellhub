@@ -8,6 +8,7 @@ SRCREV = "6e6fc8eccaa2e5567492a2b4b4d0399a865c18bf"
 SRC_URI = " \
     git://github.com/shellhub-io/shellhub;branch=master \
     file://shellhub-agent.initd \
+    file://shellhub-agent.profile.d \
     file://shellhub-agent.service \
     file://shellhub-agent.start \
 "
@@ -50,6 +51,9 @@ do_install_append() {
             -e 's,@SYSCONFDIR@,${sysconfdir},g' \
 	    -i ${D}/${sysconfdir}/init.d/shellhub-agent
     fi
+
+    # Shell prompt handling
+    install -Dm 0755 ${WORKDIR}/shellhub-agent.profile.d ${D}/${sysconfdir}/profile.d/shellhub-agent.sh
 }
 
 RDEPENDS_${PN} += "shellhub-agent-config"
