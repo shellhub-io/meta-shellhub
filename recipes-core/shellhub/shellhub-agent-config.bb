@@ -6,7 +6,7 @@ INHIBIT_DEFAULT_DEPS = "1"
 do_patch[noexec] = "1"
 do_configure[noexec] = "1"
 
-SHELLHUB_SERVER_ADDRESS ??= "http://ssh.shellhub.io"
+SHELLHUB_SERVER_ADDRESS ??= "https://cloud.shellhub.io"
 SHELLHUB_PRIVATE_KEY    ??= "${sysconfdir}/shellhub-agent.key"
 SHELLHUB_TENANT_ID      ??= "undefined"
 
