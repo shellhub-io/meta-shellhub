@@ -1,17 +1,20 @@
 SUMMARY = "ShellHub Agent"
 HOMEPAGE = "https://shellhub.io"
 LICENSE = "Apache-2.0"
-LIC_FILES_CHKSUM = "file://${S}/src/${GO_IMPORT}/LICENSE;md5=fa818a259cbed7ce8bc2a22d35a464fc"
-DEPENDS = "glide-native libxcrypt"
+LIC_FILES_CHKSUM = "file://${S}/src/${GO_IMPORT}/LICENSE.md;md5=fa818a259cbed7ce8bc2a22d35a464fc"
+DEPENDS = "libxcrypt"
 
-SRCREV = "6c20a822e42be1bbb916d70f45f0d28c9677a1fc"
 SRC_URI = " \
     git://github.com/shellhub-io/shellhub;branch=master \
     file://shellhub-agent.initd \
     file://shellhub-agent.profile.d \
     file://shellhub-agent.service \
     file://shellhub-agent.start \
+    file://agent-fix-primaryIface-method-to-skip-non-critical-e.patch;patchdir=${S}/src/${GO_IMPORT} \
 "
+
+SRCREV = "92c905b644cdf5f683130c5130f32f3b10b32c12"
+PV = "0.2.6"
 
 inherit go systemd update-rc.d
 
@@ -24,14 +27,12 @@ INITSCRIPT_NAME = "${PN}"
 INITSCRIPT_PARAMS = "defaults 99"
 
 GO_IMPORT = "github.com/shellhub-io/shellhub"
-GO_INSTALL = " \
-    ${GO_IMPORT}/agent \
-"
 
-do_configure_append() {
-    cd ${S}/src/${GO_IMPORT}/agent
-    GOPATH=${B}:${STAGING_LIBDIR}/${TARGET_SYS}/go glide install
-}
+GO_LDFLAGS = '-ldflags="${GO_RPATH} ${GO_LINKMODE} -X main.AgentVersion=${PV} -extldflags '${GO_EXTLDFLAGS}'"'
+
+GOBUILDFLAGS_append = " -modcacherw"
+
+do_compile[dirs] += "${B}/src/${GO_IMPORT}/agent"
 
 do_install_append() {
     # We name the binary as shellhub-agent
@@ -49,7 +50,7 @@ do_install_append() {
             -e 's,@LIBDIR@,${libdir},g' \
             -e 's,@LOCALSTATEDIR@,${localstatedir},g' \
             -e 's,@SYSCONFDIR@,${sysconfdir},g' \
-	    -i ${D}/${sysconfdir}/init.d/shellhub-agent
+            -i ${D}/${sysconfdir}/init.d/shellhub-agent
     fi
 
     # Shell prompt handling
@@ -57,4 +58,5 @@ do_install_append() {
 }
 
 RDEPENDS_${PN} += "shellhub-agent-config"
+RRECOMMENDS_${PN} += "ca-certificates"
 RDEPENDS_${PN}-dev += "bash"
