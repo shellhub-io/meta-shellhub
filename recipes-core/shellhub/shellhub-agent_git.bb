@@ -11,6 +11,7 @@ SRC_URI = " \
     file://shellhub-agent.service \
     file://shellhub-agent.start \
     file://agent-fix-primaryIface-method-to-skip-non-critical-e.patch;patchdir=${S}/src/${GO_IMPORT} \
+    file://agent-create-parent-directory-if-it-does-not-exist.patch;patchdir=${S}/src/${GO_IMPORT} \
 "
 
 SRCREV = "92c905b644cdf5f683130c5130f32f3b10b32c12"

@@ -1,0 +1,48 @@
+From d56813d1e12c7ef6d5aa352d7c72f56cc5a3ffb3 Mon Sep 17 00:00:00 2001
+From: "Luis Gustavo S. Barreto" <gustavo@ossystems.com.br>
+Date: Tue, 26 May 2020 15:40:38 -0300
+Subject: [PATCH] agent: create parent directory if it does not exist
+Organization: O.S. Systems Software LTDA.
+
+Closes #141
+
+Upstream-Status: Accepted [1]
+
+[1] https://github.com/shellhub-io/shellhub/commit/d56813d1e12c7ef6d5aa352d7c72f56cc5a3ffb3
+
+---
+ agent/keypair.go | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+
+diff --git a/agent/keypair.go b/agent/keypair.go
+index 1103eda..9907b57 100644
+--- a/agent/keypair.go
++++ b/agent/keypair.go
+@@ -7,6 +7,7 @@ import (
+ 	"encoding/pem"
+ 	"io/ioutil"
+ 	"os"
++	"path/filepath"
+ 
+ 	"github.com/pkg/errors"
+ )
+@@ -17,6 +18,16 @@ func generatePrivateKey(filename string) error {
+ 		return err
+ 	}
+ 
++	_, err = os.Stat(filepath.Dir(filename))
++	if os.IsNotExist(err) {
++		// Create parent directory if it does not exist
++		if err = os.MkdirAll(filepath.Dir(filename), 0700); err != nil {
++			return err
++		}
++	} else if err != nil {
++		return err
++	}
++
+ 	f, err := os.Create(filename)
+ 	if err != nil {
+ 		return err
+-- 
+2.26.2
+
