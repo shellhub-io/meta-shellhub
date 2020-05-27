@@ -10,12 +10,10 @@ SRC_URI = " \
     file://shellhub-agent.profile.d \
     file://shellhub-agent.service \
     file://shellhub-agent.start \
-    file://agent-fix-primaryIface-method-to-skip-non-critical-e.patch;patchdir=${S}/src/${GO_IMPORT} \
-    file://agent-create-parent-directory-if-it-does-not-exist.patch;patchdir=${S}/src/${GO_IMPORT} \
 "
 
-SRCREV = "92c905b644cdf5f683130c5130f32f3b10b32c12"
-PV = "0.2.6"
+SRCREV = "8c0ee51c145f66afd6d3d8dab8f273c6596178a5"
+PV = "0.3.1"
 
 inherit go systemd update-rc.d
 
