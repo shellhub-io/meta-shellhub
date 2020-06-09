@@ -13,7 +13,7 @@ SRC_URI = " \
 "
 
 SRCREV = "8c0ee51c145f66afd6d3d8dab8f273c6596178a5"
-PV = "0.3.1"
+PV = "v0.3.1"
 
 inherit go systemd update-rc.d
 
