@@ -56,6 +56,10 @@ do_install_append() {
     install -Dm 0755 ${WORKDIR}/shellhub-agent.profile.d ${D}/${sysconfdir}/profile.d/shellhub-agent.sh
 }
 
-RDEPENDS_${PN} += "shellhub-agent-config"
+RDEPENDS_${PN} += "\
+    openssh-scp \
+    shellhub-agent-config \
+"
+
 RRECOMMENDS_${PN} += "ca-certificates"
 RDEPENDS_${PN}-dev += "bash"
