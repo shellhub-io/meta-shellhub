@@ -5,15 +5,12 @@ LIC_FILES_CHKSUM = "file://${S}/src/${GO_IMPORT}/LICENSE.md;md5=fa818a259cbed7ce
 DEPENDS = "libxcrypt"
 
 SRC_URI = " \
-    git://github.com/shellhub-io/shellhub;branch=master \
+    git://github.com/shellhub-io/shellhub;nobranch=1;tag=v${PV} \
     file://shellhub-agent.initd \
     file://shellhub-agent.profile.d \
     file://shellhub-agent.service \
     file://shellhub-agent.start \
 "
-
-SRCREV = "0f6bf4879e04279b8617e0fa19491be50e52c5dd"
-PV = "v0.3.2"
 
 inherit go systemd update-rc.d
 
@@ -27,7 +24,7 @@ INITSCRIPT_PARAMS = "defaults 99"
 
 GO_IMPORT = "github.com/shellhub-io/shellhub"
 
-GO_LDFLAGS = '-ldflags="${GO_RPATH} ${GO_LINKMODE} -X main.AgentVersion=${PV} -extldflags '${GO_EXTLDFLAGS}'"'
+GO_LDFLAGS = '-ldflags="${GO_RPATH} ${GO_LINKMODE} -X main.AgentVersion=v${PV} -extldflags '${GO_EXTLDFLAGS}'"'
 
 GOBUILDFLAGS_append = " -modcacherw"
 
