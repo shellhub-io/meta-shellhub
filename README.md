@@ -16,6 +16,13 @@ This layer depends on:
   branch: master
 ```
 
+## Notes for using with Zeus release
+
+ShellHub uses Go Lang version 1.14.x and the related recipes and classes were
+backported from the OpenEmbedded-Core layer. The `meta-shellhub` layer has a higher
+priority than `openembedded-core` or` poky`, you need to add` meta-shellhub`
+before core layer in `bblayers.conf` to build `shellhub-agent` correctly.
+
 ## Contributing
 
 ShellHub is an open source project and we love to receive
