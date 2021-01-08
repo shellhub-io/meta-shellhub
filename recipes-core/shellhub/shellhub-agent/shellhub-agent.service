@@ -1,7 +1,7 @@
 [Unit]
 Description=ShellHub agent
-Wants=network-online.target
-After=local-fs.target network.target network-online.target time-sync.target
+Wants=network.target
+After=local-fs.target network.target time-sync.target
 Requires=local-fs.target
 
 [Service]
