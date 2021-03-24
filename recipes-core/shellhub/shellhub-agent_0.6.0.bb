@@ -56,6 +56,7 @@ do_install_append() {
 RDEPENDS_${PN} += "\
     openssh-scp \
     shellhub-agent-config \
+    shadow \
 "
 
 RRECOMMENDS_${PN} += "ca-certificates"
