@@ -24,6 +24,8 @@ INITSCRIPT_PARAMS = "defaults 99"
 
 GO_IMPORT = "github.com/shellhub-io/shellhub"
 
+GO_INSTALL = "github.com/shellhub-io/shellhub/agent"
+
 GO_LDFLAGS = '-ldflags="${GO_RPATH} ${GO_LINKMODE} -X main.AgentVersion=v${PV} -extldflags '${GO_EXTLDFLAGS}'"'
 
 GOBUILDFLAGS_append = " -modcacherw"
