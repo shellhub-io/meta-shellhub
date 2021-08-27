@@ -17,7 +17,7 @@ inherit go systemd update-rc.d
 # Avoid dynamic linking as it causes segfault
 GO_LINKSHARED = ""
 
-SYSTEMD_SERVICE_${PN} = "${PN}.service"
+SYSTEMD_SERVICE:${PN} = "${PN}.service"
 
 INITSCRIPT_NAME = "${PN}"
 INITSCRIPT_PARAMS = "defaults 99"
@@ -28,11 +28,11 @@ GO_INSTALL = "github.com/shellhub-io/shellhub/agent"
 
 GO_LDFLAGS = '-ldflags="${GO_RPATH} ${GO_LINKMODE} -X main.AgentVersion=v${PV} -extldflags '${GO_EXTLDFLAGS}'"'
 
-GOBUILDFLAGS_append = " -modcacherw"
+GOBUILDFLAGS:append = " -modcacherw"
 
 do_compile[dirs] += "${B}/src/${GO_IMPORT}/agent"
 
-do_install_append() {
+do_install:append() {
     # We name the binary as shellhub-agent
     mv ${D}${bindir}/agent ${D}${bindir}/shellhub-agent
 
@@ -55,11 +55,11 @@ do_install_append() {
     install -Dm 0755 ${WORKDIR}/shellhub-agent.profile.d ${D}/${sysconfdir}/profile.d/shellhub-agent.sh
 }
 
-RDEPENDS_${PN} += "\
+RDEPENDS:${PN} += "\
     openssh-scp \
     shellhub-agent-config \
     shadow \
 "
 
-RRECOMMENDS_${PN} += "ca-certificates"
-RDEPENDS_${PN}-dev += "bash"
+RRECOMMENDS:${PN} += "ca-certificates"
+RDEPENDS:${PN}-dev += "bash"
