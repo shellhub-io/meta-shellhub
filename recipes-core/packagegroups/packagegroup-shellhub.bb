@@ -6,6 +6,6 @@ inherit packagegroup
 
 PACKAGES += "${PN}-runtime"
 
-RDEPENDS_${PN}-runtime += " \
+RDEPENDS:${PN}-runtime += " \
     shellhub-agent \
 "
