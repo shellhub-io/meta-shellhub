@@ -2,7 +2,6 @@ SUMMARY = "ShellHub Agent"
 HOMEPAGE = "https://shellhub.io"
 LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://${S}/src/${GO_IMPORT}/LICENSE.md;md5=fa818a259cbed7ce8bc2a22d35a464fc"
-DEPENDS = "libxcrypt"
 
 SRC_URI = " \
     git://github.com/shellhub-io/shellhub;nobranch=1;tag=v${PV} \
