@@ -5,7 +5,7 @@ LIC_FILES_CHKSUM = "file://${S}/src/${GO_IMPORT}/LICENSE.md;md5=fa818a259cbed7ce
 DEPENDS = "libxcrypt"
 
 SRC_URI = " \
-    git://github.com/shellhub-io/shellhub;nobranch=1;tag=v${PV} \
+    git://github.com/shellhub-io/shellhub;protocol=https;nobranch=1;tag=v${PV} \
     file://shellhub-agent.initd \
     file://shellhub-agent.profile.d \
     file://shellhub-agent.service \
