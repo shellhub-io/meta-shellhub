@@ -5,11 +5,12 @@ LIC_FILES_CHKSUM = "file://${S}/src/${GO_IMPORT}/LICENSE.md;md5=fa818a259cbed7ce
 DEPENDS = "libxcrypt"
 
 SRC_URI = " \
-    git://github.com/shellhub-io/shellhub;nobranch=1;tag=v${PV} \
+    git://github.com/shellhub-io/shellhub;protocol=https;nobranch=1;tag=v${PV} \
     file://shellhub-agent.initd \
     file://shellhub-agent.profile.d \
     file://shellhub-agent.service \
     file://shellhub-agent.start \
+    file://shellhub-agent.wrapper.in \
 "
 
 inherit go systemd update-rc.d
@@ -24,6 +25,8 @@ INITSCRIPT_PARAMS = "defaults 99"
 
 GO_IMPORT = "github.com/shellhub-io/shellhub"
 
+GO_INSTALL = "github.com/shellhub-io/shellhub/agent"
+
 GO_LDFLAGS = '-ldflags="${GO_RPATH} ${GO_LINKMODE} -X main.AgentVersion=v${PV} -extldflags '${GO_EXTLDFLAGS}'"'
 
 GOBUILDFLAGS_append = " -modcacherw"
@@ -32,7 +35,8 @@ do_compile[dirs] += "${B}/src/${GO_IMPORT}/agent"
 
 do_install_append() {
     # We name the binary as shellhub-agent
-    mv ${D}${bindir}/agent ${D}${bindir}/shellhub-agent
+    mkdir -p ${D}${libexecdir}/shellhub/bin/
+    mv ${D}${bindir}/agent ${D}${libexecdir}/shellhub/bin/shellhub-agent
 
     # Handle init system integration
     if ${@bb.utils.contains('DISTRO_FEATURES','systemd','true','false',d)}; then
@@ -51,6 +55,10 @@ do_install_append() {
 
     # Shell prompt handling
     install -Dm 0755 ${WORKDIR}/shellhub-agent.profile.d ${D}/${sysconfdir}/profile.d/shellhub-agent.sh
+
+    # Script that allow to run sh files before shellhub-agent binary start
+    install -Dm 0755 ${WORKDIR}/shellhub-agent.wrapper.in ${D}${bindir}/shellhub-agent
+    sed -e 's,@LIBEXEC@,${libexecdir},g' -i ${D}${bindir}/shellhub-agent
 }
 
 RDEPENDS_${PN} += "\
