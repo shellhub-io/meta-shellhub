@@ -1,0 +1,7 @@
+#!/bin/sh
+
+for i in /etc/shellhub-agent.environment.d/*.sh ; do
+    [ -r "$i" ] && . $i
+done
+
+@LIBEXEC@/shellhub/bin/shellhub-agent $@
