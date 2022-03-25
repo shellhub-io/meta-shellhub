@@ -5,13 +5,15 @@ LIC_FILES_CHKSUM = "file://${S}/src/${GO_IMPORT}/LICENSE.md;md5=fa818a259cbed7ce
 DEPENDS = "libxcrypt"
 
 SRC_URI = " \
-    git://github.com/shellhub-io/shellhub;protocol=https;nobranch=1;tag=v${PV} \
+    git://github.com/shellhub-io/shellhub;protocol=https;branch=master \
     file://shellhub-agent.initd \
     file://shellhub-agent.profile.d \
     file://shellhub-agent.service \
     file://shellhub-agent.start \
     file://shellhub-agent.wrapper.in \
 "
+
+SRCREV = "ad85eb5800d611dc72c28928704b143b0adc3eac"
 
 inherit go systemd update-rc.d
 
