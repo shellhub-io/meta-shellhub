@@ -34,6 +34,7 @@ GO_LDFLAGS = '-ldflags="${GO_RPATH} ${GO_LINKMODE} -X main.AgentVersion=v${PV} -
 GOBUILDFLAGS:append = " -modcacherw"
 
 do_compile[dirs] += "${B}/src/${GO_IMPORT}/agent"
+do_compile[network] = "1"
 
 do_install:append() {
     # We name the binary as shellhub-agent
