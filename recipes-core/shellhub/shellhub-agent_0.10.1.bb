@@ -13,7 +13,7 @@ SRC_URI = " \
     file://shellhub-agent.wrapper.in \
 "
 
-SRCREV="63c384d0e5094bf743ec0fd08c1b0e78b5e1010b"
+SRCREV="47a298c01b38bf17b11058f9fde742750fcfe1d8"
 
 inherit go systemd update-rc.d
 
