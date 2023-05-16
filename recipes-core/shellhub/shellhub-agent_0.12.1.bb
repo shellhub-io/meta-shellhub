@@ -13,7 +13,7 @@ SRC_URI = " \
     file://shellhub-agent.wrapper.in \
 "
 
-SRCREV="f1536719126a8ddfde997786a3fddf5829fcccc8"
+SRCREV="0664c05ad9c75d2cf8bc7d62d6c2ed539790a49c"
 
 inherit go systemd update-rc.d
 
@@ -34,6 +34,7 @@ GO_LDFLAGS = '-ldflags="${GO_RPATH} ${GO_LINKMODE} -X main.AgentVersion=v${PV} -
 GOBUILDFLAGS:append = " -modcacherw"
 
 do_compile[dirs] += "${B}/src/${GO_IMPORT}/agent"
+do_compile[network] = "1"
 
 do_install:append() {
     # We name the binary as shellhub-agent
