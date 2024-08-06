@@ -5,7 +5,7 @@ LIC_FILES_CHKSUM = "file://${S}/src/${GO_IMPORT}/LICENSE.md;md5=fa818a259cbed7ce
 DEPENDS = "libxcrypt"
 
 SRC_URI = " \
-    git://github.com/shellhub-io/shellhub;protocol=https;nobranch=1 \
+    git://github.com/shellhub-io/shellhub;protocol=https;nobranch=1;destsuffix=${GO_SRCURI_DESTSUFFIX} \
     file://shellhub-agent.initd \
     file://shellhub-agent.profile.d \
     file://shellhub-agent.service \
@@ -43,12 +43,12 @@ do_install:append() {
 
     # Handle init system integration
     if ${@bb.utils.contains('DISTRO_FEATURES','systemd','true','false',d)}; then
-        install -Dm 0644 ${WORKDIR}/shellhub-agent.service ${D}${systemd_unitdir}/system/shellhub-agent.service
+        install -Dm 0644 ${UNPACKDIR}/shellhub-agent.service ${D}${systemd_unitdir}/system/shellhub-agent.service
         sed -i -e 's,@BINDIR@,${bindir},g' ${D}${systemd_unitdir}/system/shellhub-agent.service
     fi
     if ${@bb.utils.contains('DISTRO_FEATURES','sysvinit','true','false',d)}; then
-        install -Dm 0755 ${WORKDIR}/shellhub-agent.initd ${D}/${sysconfdir}/init.d/shellhub-agent
-        install -Dm 0755 ${WORKDIR}/shellhub-agent.start ${D}${libdir}/shellhub-agent/shellhub-agent.start
+        install -Dm 0755 ${UNPACKDIR}/shellhub-agent.initd ${D}/${sysconfdir}/init.d/shellhub-agent
+        install -Dm 0755 ${UNPACKDIR}/shellhub-agent.start ${D}${libdir}/shellhub-agent/shellhub-agent.start
         sed -e 's,@BINDIR@,${bindir},g' \
             -e 's,@LIBDIR@,${libdir},g' \
             -e 's,@LOCALSTATEDIR@,${localstatedir},g' \
@@ -57,10 +57,10 @@ do_install:append() {
     fi
 
     # Shell prompt handling
-    install -Dm 0755 ${WORKDIR}/shellhub-agent.profile.d ${D}/${sysconfdir}/profile.d/shellhub-agent.sh
+    install -Dm 0755 ${UNPACKDIR}/shellhub-agent.profile.d ${D}/${sysconfdir}/profile.d/shellhub-agent.sh
 
     # Script that allow to run sh files before shellhub-agent binary start
-    install -Dm 0755 ${WORKDIR}/shellhub-agent.wrapper.in ${D}${bindir}/shellhub-agent
+    install -Dm 0755 ${UNPACKDIR}/shellhub-agent.wrapper.in ${D}${bindir}/shellhub-agent
     sed -e 's,@LIBEXEC@,${libexecdir},g' -i ${D}${bindir}/shellhub-agent
 }
 
