@@ -1,9 +1,7 @@
-From 9ba507e076c744f4d394418e4a849e68cd426a4a Mon Sep 17 00:00:00 2001
+From a31db6f78d851741aea1e76132a84a24138a5bc6 Mon Sep 17 00:00:00 2001
 From: Alex Kube <alexander.j.kube@gmail.com>
 Date: Wed, 23 Oct 2019 21:18:56 +0430
-Subject: [PATCH 7/9] cmd/go: make GOROOT precious by default
-
-Upstream-Status: Inappropriate [OE specific]
+Subject: [PATCH] cmd/go: make GOROOT precious by default
 
 The go build tool normally rebuilds whatever it detects is
 stale.  This can be a problem when GOROOT is intended to
@@ -20,16 +18,21 @@ Adapted to Go 1.13 from patches originally submitted to
 the meta/recipes-devtools/go tree by
 Matt Madison <matt@madison.systems>.
 
+Upstream-Status: Inappropriate [OE specific]
+
 Signed-off-by: Alexander J Kube <alexander.j.kube@gmail.com>
+Signed-off-by: Jose Quaresma <jose.quaresma@foundries.io>
 ---
  src/cmd/go/internal/work/action.go |  3 +++
  src/cmd/go/internal/work/build.go  |  6 ++++++
  src/cmd/go/internal/work/exec.go   | 25 +++++++++++++++++++++++++
  3 files changed, 34 insertions(+)
 
+diff --git a/src/cmd/go/internal/work/action.go b/src/cmd/go/internal/work/action.go
+index a59072e..9e35ebd 100644
 --- a/src/cmd/go/internal/work/action.go
 +++ b/src/cmd/go/internal/work/action.go
-@@ -670,6 +670,9 @@ func (b *Builder) addTransitiveLinkDeps(
+@@ -754,6 +754,9 @@ func (b *Builder) addTransitiveLinkDeps(a, a1 *Action, shlib string) {
  			if p1 == nil || p1.Shlib == "" || haveShlib[filepath.Base(p1.Shlib)] {
  				continue
  			}
@@ -39,9 +42,11 @@ Signed-off-by: Alexander J Kube <alexander.j.kube@gmail.com>
  			haveShlib[filepath.Base(p1.Shlib)] = true
  			// TODO(rsc): The use of ModeInstall here is suspect, but if we only do ModeBuild,
  			// we'll end up building an overall library or executable that depends at runtime
+diff --git a/src/cmd/go/internal/work/build.go b/src/cmd/go/internal/work/build.go
+index 408edb5..3d60252 100644
 --- a/src/cmd/go/internal/work/build.go
 +++ b/src/cmd/go/internal/work/build.go
-@@ -167,6 +167,8 @@ See also: go install, go get, go clean.
+@@ -233,6 +233,8 @@ See also: go install, go get, go clean.
  
  const concurrentGCBackendCompilationEnabledByDefault = true
  
@@ -50,10 +55,10 @@ Signed-off-by: Alexander J Kube <alexander.j.kube@gmail.com>
  func init() {
  	// break init cycle
  	CmdBuild.Run = runBuild
-@@ -179,6 +181,10 @@ func init() {
- 
- 	AddBuildFlags(CmdBuild, DefaultBuildFlags)
- 	AddBuildFlags(CmdInstall, DefaultBuildFlags)
+@@ -246,6 +248,10 @@ func init() {
+ 		AddCoverFlags(CmdBuild, nil)
+ 		AddCoverFlags(CmdInstall, nil)
+ 	}
 +
 +	if x := os.Getenv("GOROOT_OVERRIDE"); x != "" {
 +		goRootPrecious = false
@@ -61,10 +66,12 @@ Signed-off-by: Alexander J Kube <alexander.j.kube@gmail.com>
  }
  
  // Note that flags consulted by other parts of the code
+diff --git a/src/cmd/go/internal/work/exec.go b/src/cmd/go/internal/work/exec.go
+index 9724cd0..544df46 100644
 --- a/src/cmd/go/internal/work/exec.go
 +++ b/src/cmd/go/internal/work/exec.go
-@@ -468,6 +468,23 @@ func (b *Builder) build(a *Action) (err
- 		return errors.New("binary-only packages are no longer supported")
+@@ -544,6 +544,23 @@ func (b *Builder) build(ctx context.Context, a *Action) (err error) {
+ 		return err
  	}
  
 +	if goRootPrecious && (a.Package.Standard || a.Package.Goroot) {
@@ -84,10 +91,10 @@ Signed-off-by: Alexander J Kube <alexander.j.kube@gmail.com>
 +		}
 +	}
 +
- 	if err := b.Mkdir(a.Objdir); err != nil {
+ 	if err := sh.Mkdir(a.Objdir); err != nil {
  		return err
  	}
-@@ -1520,6 +1537,14 @@ func BuildInstallFunc(b *Builder, a *Act
+@@ -1737,6 +1754,14 @@ func (b *Builder) linkShared(ctx context.Context, a *Action) (err error) {
  		return err
  	}
  
@@ -99,6 +106,6 @@ Signed-off-by: Alexander J Kube <alexander.j.kube@gmail.com>
 +		}
 +	}
 +
- 	if err := b.Mkdir(a.Objdir); err != nil {
+ 	if err := b.Shell(a).Mkdir(a.Objdir); err != nil {
  		return err
  	}
