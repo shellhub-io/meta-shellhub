@@ -1,10 +1,13 @@
 SUMMARY = "ShellHub Agent"
+DESCRIPTION = "ShellHub agent: enables remote SSH access to Linux devices behind firewall or NAT."
 HOMEPAGE = "https://shellhub.io"
+BUGTRACKER = "https://github.com/shellhub-io/shellhub/issues"
+SECTION = "console/network"
 LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://${S}/src/${GO_IMPORT}/LICENSE.md;md5=fa818a259cbed7ce8bc2a22d35a464fc"
 DEPENDS = "libxcrypt"
 
-SRC_URI = " \
+SRC_URI = "\
     git://github.com/shellhub-io/shellhub;protocol=https;nobranch=1;destsuffix=${GO_SRCURI_DESTSUFFIX} \
     file://shellhub-agent.initd \
     file://shellhub-agent.profile.d \
@@ -34,11 +37,12 @@ GO_LDFLAGS = '-ldflags="${GO_RPATH} ${GO_LINKMODE} -X main.AgentVersion=v${PV} -
 GOBUILDFLAGS:append = " -modcacherw"
 
 do_compile[dirs] += "${B}/src/${GO_IMPORT}/agent"
+# nooelint: oelint.task.network  go modules are fetched during compile
 do_compile[network] = "1"
 
 do_install:append() {
     # We name the binary as shellhub-agent
-    mkdir -p ${D}${libexecdir}/shellhub/bin/
+    install -d ${D}${libexecdir}/shellhub/bin/
     mv ${D}${bindir}/agent ${D}${libexecdir}/shellhub/bin/shellhub-agent
 
     # Handle init system integration
@@ -66,9 +70,9 @@ do_install:append() {
 
 RDEPENDS:${PN} += "\
     openssh-scp \
-    shellhub-agent-config \
     shadow \
+    shellhub-agent-config \
 "
+RDEPENDS:${PN}-dev += "bash"
 
 RRECOMMENDS:${PN} += "ca-certificates"
-RDEPENDS:${PN}-dev += "bash"
