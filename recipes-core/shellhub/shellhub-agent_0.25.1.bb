@@ -3,6 +3,7 @@ DESCRIPTION = "ShellHub agent: enables remote SSH access to Linux devices behind
 HOMEPAGE = "https://shellhub.io"
 BUGTRACKER = "https://github.com/shellhub-io/shellhub/issues"
 SECTION = "console/network"
+CVE_PRODUCT = "shellhub"
 LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://${S}/src/${GO_IMPORT}/LICENSE.md;md5=fa818a259cbed7ce8bc2a22d35a464fc"
 DEPENDS = "libxcrypt"
