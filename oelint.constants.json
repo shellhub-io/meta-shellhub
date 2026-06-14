@@ -1,0 +1,11 @@
+{
+    "comment": "Layer constant DB, auto-loaded by oelint-adv from the layer root. Declares the OEL project distro/machine override tokens it cannot know about when run standalone.",
+    "replacements": {
+        "distros": [
+            "oel"
+        ],
+        "machines": [
+            "arm"
+        ]
+    }
+}
