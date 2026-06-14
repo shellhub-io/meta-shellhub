@@ -1,0 +1,25 @@
+name: OE Lint
+
+on:
+  pull_request:
+  merge_group:
+  push:
+    branches:
+      - master
+
+concurrency:
+  group: ${{ github.repository }}-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  oelint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: ossystems/nix-actions@v1
+        with:
+          install-nix: true
+          flake-check: false
+          build-hosts: false
+          build-devshells: false
+          devshell: github:OSSystems/yocto-env.nix#lint
+          run: ./contrib/oelint/run-oelint.sh
