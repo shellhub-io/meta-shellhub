@@ -1,3 +1,4 @@
+# nooelint: oelint.bbclass.underscores oelint.file.inlinesuppress_na  no EXPORT_FUNCTIONS here, so the dash is harmless
 # Allow overriding of ShellHub Tenant ID
 #
 # Required variable:
@@ -9,9 +10,9 @@
 #
 # Copyright 2021 (C) O.S. Systems Software LTDA.
 
-
 # Override the TENANT_ID from existing ShellHub configuration file.
-ROOTFS_POSTPROCESS_COMMAND += 'shellhub_override_tenant_id ;'
+ROOTFS_POSTPROCESS_COMMAND += "shellhub_override_tenant_id;"
+shellhub_override_tenant_id[doc] = "Override the ShellHub TENANT_ID in the rootfs config from SHELLHUB_ROOTFS_TENANT_ID."
 shellhub_override_tenant_id () {
     if [ ! -e "${IMAGE_ROOTFS}${sysconfdir}/default/shellhub-agent" ]; then
         bbfatal "'${sysconfdir}/default/shellhub-agent' doesn't exist."
