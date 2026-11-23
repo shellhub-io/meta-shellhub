@@ -13,11 +13,8 @@ here=$(cd -- "$(dirname -- "$0")" && pwd)
 layer=$(cd -- "$here/../.." && pwd)
 cd -- "$layer"
 
-# recipes-devtools/go is a verbatim copy of oe-core's Go recipes, kept that
-# way so it can be diffed against upstream and dropped once oe-core catches up.
 files=$(find . \
-    -path ./recipes-devtools/go -prune -o \
-    \( -name '*.bb' -o -name '*.bbappend' -o -name '*.bbclass' -o -name '*.inc' \) -print \
+    \( -name '*.bb' -o -name '*.bbappend' -o -name '*.bbclass' -o -name '*.inc' \) \
     | sort)
 
 # Run serially: parallel workers race while loading the layer constants and
